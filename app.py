@@ -16,9 +16,10 @@ def cleanup(text: str) -> str:
     text = re.sub("’", "'", text)
     text = re.sub("…", "...", text)
     text = re.sub("•", "*", text)
+    text = re.sub(", and", " and", text)
+    text = re.sub(", or", " or", text)
     text = re.sub(r"<2060>\s+<2060>", " ", text)
     return text
-
 
 def cleanup_file(path: Path) -> None:
     if not path.is_file():
@@ -32,7 +33,6 @@ def cleanup_file(path: Path) -> None:
 
     os.replace(tmp, path)
 
-
 def cleanup_dir(dir_path: Path) -> None:
     if not dir_path.is_dir():
         return
@@ -44,7 +44,6 @@ def cleanup_dir(dir_path: Path) -> None:
             cleanup_dir(entry)
         else:
             cleanup_file(entry)
-
 
 def run_cli(paths: list[str]) -> int:
     if paths:
@@ -99,7 +98,6 @@ def run_web() -> int:
 
     return 0
 
-
 def main() -> int:
     parser = argparse.ArgumentParser(description="Cleanup text (CLI + Streamlit UI).")
     parser.add_argument("--web", action="store_true", help="Launch Streamlit UI")
@@ -127,7 +125,6 @@ def main() -> int:
         return subprocess.call(cmd)
 
     return run_cli(args.paths)
-
 
 if __name__ == "__main__":
     raise SystemExit(main())
