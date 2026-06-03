@@ -42,17 +42,6 @@ Standard verification for this site includes:
 - `100%` significant-range execution coverage for the inline app script
 - git release gate with commit, tag, and push
 
-## Deployment
+## Operational Note
 
-The deploy target for this site is `hp.local` in `~/projects/ai-cleanup`.
-
-Deploy flow:
-
-```bash
-ssh hp.local
-cd ~/projects/ai-cleanup
-git pull
-dashboard docker compose up -d --build
-```
-
-The remote working tree must be clean enough for `git pull` to succeed before the rebuild step runs.
+Deployment details are maintained in internal project records rather than this site README.

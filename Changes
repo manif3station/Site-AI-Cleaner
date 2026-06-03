@@ -1,3 +1,11 @@
+0.1.7 2026-06-03
+
+- Removed deployment-specific host and command details from the site-root `README.md`.
+
+0.1.6 2026-06-03
+
+- Replaced the Open Graph preview image with a site-relevant AI Text Cleaner share asset.
+
 0.1.5 2026-06-03
 
 - Added a real site-root `README.md` for the static AI Text Cleaner project and documented the deploy path.

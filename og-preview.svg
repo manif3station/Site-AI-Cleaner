@@ -1,25 +1,50 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
-  <title id="title">Site AI Cleaner preview</title>
-  <desc id="desc">Preview card for Site AI Cleaner, a browser-based text cleanup tool.</desc>
+  <title id="title">AI Text Cleaner share preview</title>
+  <desc id="desc">A clean preview card for AI Text Cleaner with privacy-first copy and before-and-after text cleanup examples.</desc>
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#f8f4ec"/>
-      <stop offset="100%" stop-color="#efe8dd"/>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f6f4ff"/>
+      <stop offset="55%" stop-color="#dff7ff"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.96"/>
+      <stop offset="100%" stop-color="#eef5ff" stop-opacity="0.96"/>
     </linearGradient>
   </defs>
-  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
-  <circle cx="1050" cy="120" r="140" fill="#d8ede9"/>
-  <circle cx="130" cy="520" r="170" fill="#f1ddc5"/>
-  <rect x="72" y="70" width="1056" height="490" rx="28" fill="#fffaf2" stroke="#d8d1c8"/>
-  <rect x="110" y="120" width="220" height="42" rx="21" fill="#d8ede9"/>
-  <text x="132" y="147" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18" font-weight="700" letter-spacing="2.2" fill="#115e59">FRONTEND ONLY TEXT CLEANER</text>
-  <text x="110" y="250" font-family="Iowan Old Style, Georgia, serif" font-size="84" font-weight="700" letter-spacing="-2.4" fill="#1e2430">Site AI Cleaner</text>
-  <text x="110" y="320" font-family="Avenir Next, Segoe UI, sans-serif" font-size="32" fill="#5f6877">Clean smart punctuation and pasted text artifacts in your browser.</text>
-  <rect x="110" y="390" width="430" height="88" rx="22" fill="#0f766e"/>
-  <text x="150" y="443" font-family="Avenir Next, Segoe UI, sans-serif" font-size="34" font-weight="700" fill="#ffffff">Paste. Clean. Copy.</text>
-  <rect x="700" y="170" width="320" height="230" rx="24" fill="#f7f1e8" stroke="#ddd4c7"/>
-  <text x="730" y="230" font-family="Consolas, monospace" font-size="22" fill="#1e2430">“Draft” — with bullets •</text>
-  <text x="730" y="268" font-family="Consolas, monospace" font-size="22" fill="#1e2430">and ellipses… becomes</text>
-  <text x="730" y="332" font-family="Consolas, monospace" font-size="22" fill="#115e59">"Draft" ,  with bullets *</text>
-  <text x="730" y="370" font-family="Consolas, monospace" font-size="22" fill="#115e59">and ellipses...</text>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="160" cy="120" r="140" fill="#6d74ff" opacity="0.10"/>
+  <circle cx="1030" cy="120" r="110" fill="#69d7f6" opacity="0.18"/>
+  <circle cx="980" cy="520" r="160" fill="#6ee2b7" opacity="0.12"/>
+
+  <rect x="58" y="56" width="1084" height="518" rx="34" fill="#ffffff" fill-opacity="0.58" stroke="#ffffff" stroke-opacity="0.8"/>
+
+  <g transform="translate(96 92)">
+    <rect x="0" y="0" width="110" height="110" rx="28" fill="#1d2440"/>
+    <text x="55" y="72" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="54" font-weight="700" fill="#ffffff">A</text>
+    <text x="146" y="36" font-family="Avenir Next, Segoe UI, sans-serif" font-size="26" font-weight="700" fill="#6d74ff">AI Text Cleaner</text>
+    <text x="146" y="78" font-family="Avenir Next, Segoe UI, sans-serif" font-size="56" font-weight="700" fill="#1d2440">Security First, Cleanup Later</text>
+    <text x="146" y="120" font-family="Avenir Next, Segoe UI, sans-serif" font-size="28" fill="#52607f">Privacy-first browser cleanup for pasted AI text artifacts.</text>
+  </g>
+
+  <g transform="translate(96 240)">
+    <rect x="0" y="0" width="480" height="250" rx="28" fill="url(#panel)" stroke="#d9e4ff"/>
+    <text x="34" y="46" font-family="Avenir Next, Segoe UI, sans-serif" font-size="24" font-weight="700" fill="#6d74ff">Original text</text>
+    <text x="34" y="92" font-family="Avenir Next, Segoe UI, sans-serif" font-size="28" fill="#1d2440">“a while — hope yo”</text>
+    <text x="34" y="136" font-family="Avenir Next, Segoe UI, sans-serif" font-size="28" fill="#1d2440">• hidden chars and bullets…</text>
+    <text x="34" y="180" font-family="Avenir Next, Segoe UI, sans-serif" font-size="28" fill="#1d2440">:contentReference[oaicite:0]</text>
+  </g>
+
+  <g transform="translate(624 240)">
+    <rect x="0" y="0" width="480" height="250" rx="28" fill="#1d2440" stroke="#1d2440"/>
+    <text x="34" y="46" font-family="Avenir Next, Segoe UI, sans-serif" font-size="24" font-weight="700" fill="#69d7f6">Cleaned output</text>
+    <text x="34" y="92" font-family="Avenir Next, Segoe UI, sans-serif" font-size="28" fill="#ffffff">"a while, hope yo"</text>
+    <text x="34" y="136" font-family="Avenir Next, Segoe UI, sans-serif" font-size="28" fill="#ffffff">* hidden chars and bullets...</text>
+    <text x="34" y="180" font-family="Avenir Next, Segoe UI, sans-serif" font-size="28" fill="#ffffff">citation leftovers removed</text>
+  </g>
+
+  <g transform="translate(96 520)">
+    <rect x="0" y="0" width="254" height="20" rx="10" fill="#6ee2b7"/>
+    <text x="372" y="16" font-family="Avenir Next, Segoe UI, sans-serif" font-size="22" fill="#52607f">Browser-only. No upload step. No server-side text processing.</text>
+  </g>
 </svg>
