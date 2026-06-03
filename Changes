@@ -1,3 +1,8 @@
+0.1.5 2026-06-03
+
+- Added a real site-root `README.md` for the static AI Text Cleaner project and documented the deploy path.
+- Added the deploy-required tunnel environment variables back into the repository `.env` so release metadata and deploy configuration stay aligned.
+
 0.1.4 2026-06-03
 
 - Added the deploy-required tunnel environment variables to the site-local `.env` so clean pulls keep the hp.local runtime contract intact.
