@@ -44,4 +44,4 @@ Standard verification for this site includes:
 
 ## Operational Note
 
-Deployment details are maintained in internal project records rather than this site README.
+AI Text Cleaner is currently live at `https://clean.michaelpc.com`. The active app is a single HTML file, so `index.html` can also be downloaded and opened locally and it will still work. The application runs entirely in the browser and does not need a backend.

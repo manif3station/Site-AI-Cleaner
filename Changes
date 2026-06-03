@@ -1,3 +1,7 @@
+0.1.8 2026-06-03
+
+- Reworded the site-root README note to explain the live URL, local single-file use, and browser-only runtime without exposing private deployment setup.
+
 0.1.7 2026-06-03
 
 - Removed deployment-specific host and command details from the site-root `README.md`.
