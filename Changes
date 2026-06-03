@@ -1,3 +1,7 @@
+0.1.3 2026-06-03
+
+- Tightened em-dash cleanup so spaced dash artifacts are normalized more aggressively before comma cleanup.
+
 0.1.2 2026-06-03
 
 - Renamed the visible product label from `Site AI Cleaner` to `AI Text Cleaner`.
