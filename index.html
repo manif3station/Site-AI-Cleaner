@@ -3,25 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Site AI Cleaner | Plain Text Cleanup in Your Browser</title>
+  <title>AI Text Cleaner | Plain Text Cleanup in Your Browser</title>
   <meta name="description" content="Clean smart quotes, dashes, bullets, ellipses, and awkward pasted punctuation directly in your browser with a single-page text cleanup tool.">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://clean.michaelpc.com/">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Site AI Cleaner">
+  <meta property="og:title" content="AI Text Cleaner">
   <meta property="og:description" content="A frontend-only text cleanup tool for stripping pasted punctuation oddities and making text predictable again.">
   <meta property="og:url" content="https://clean.michaelpc.com/">
-  <meta property="og:site_name" content="Site AI Cleaner">
+  <meta property="og:site_name" content="AI Text Cleaner">
   <meta property="og:image" content="https://clean.michaelpc.com/og-preview.svg">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Site AI Cleaner">
+  <meta name="twitter:title" content="AI Text Cleaner">
   <meta name="twitter:description" content="Clean pasted smart punctuation and hidden text artifacts directly in the browser.">
   <meta name="twitter:image" content="https://clean.michaelpc.com/og-preview.svg">
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "Site AI Cleaner",
+      "name": "AI Text Cleaner",
       "applicationCategory": "BusinessApplication",
       "browserRequirements": "Requires JavaScript. Works in modern desktop and mobile browsers.",
       "description": "A browser-based text cleanup utility that converts smart punctuation and common pasted formatting artifacts into plainer text.",
@@ -29,7 +29,7 @@
       "url": "https://clean.michaelpc.com/"
     }
   </script>
-  <!-- version: 0.1.0 -->
+  <!-- version: 0.1.2 -->
   <style>
     :root {
       --bg-top: #f6f4ff;
@@ -213,6 +213,76 @@
       display: grid;
       gap: 1rem;
       min-height: calc(100vh - 5rem);
+    }
+
+    .mobile-toolbar,
+    .mobile-drawer {
+      display: none;
+    }
+
+    .mobile-toolbar {
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.95rem 1rem;
+      border-radius: 20px;
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+    }
+
+    .mobile-toolbar strong {
+      display: block;
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+
+    .mobile-toolbar span {
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    .mobile-menu-button {
+      min-width: 92px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent-strong) 0%, #8a94ff 100%);
+      box-shadow: 0 14px 28px rgba(79, 94, 247, 0.18);
+    }
+
+    .mobile-drawer {
+      margin-top: -0.25rem;
+      padding: 1rem;
+      border-radius: 22px;
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .mobile-drawer.is-open {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .mobile-drawer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .mobile-action-group,
+    .mobile-drawer-section {
+      display: grid;
+      gap: 0.7rem;
+    }
+
+    .mobile-action-group button {
+      width: 100%;
+    }
+
+    .mobile-drawer-section h2 {
+      font-size: 1rem;
+      line-height: 1.2;
     }
 
     .topbar {
@@ -422,7 +492,7 @@
 
     .tool-grid {
       display: grid;
-      grid-template-columns: 1.25fr 0.95fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 1rem;
     }
 
@@ -451,14 +521,14 @@
     }
 
     .tool-card.primary textarea {
-      background: rgba(255, 255, 255, 0.18);
-      border-color: rgba(255, 255, 255, 0.22);
-      color: #fff;
-      box-shadow: none;
+      background: #f9fbff;
+      border-color: var(--line);
+      color: var(--ink);
+      box-shadow: inset 0 1px 2px rgba(17, 24, 39, 0.03);
     }
 
     .tool-card.primary textarea::placeholder {
-      color: rgba(255, 255, 255, 0.72);
+      color: var(--muted);
     }
 
     .tool-card.secondary {
@@ -549,6 +619,17 @@
       margin-top: 0.9rem;
       font-size: 0.95rem;
       color: var(--accent-strong);
+    }
+
+    .input-actions,
+    .output-actions {
+      margin-top: 0.9rem;
+    }
+
+    .input-actions .button,
+    .output-actions .button {
+      width: 100%;
+      justify-content: center;
     }
 
     code {
@@ -725,11 +806,23 @@
         line-height: 1.65;
       }
 
+      .sidebar,
+      .right-rail,
+      .topbar,
+      .intro-card,
+      .section-head,
+      .mini-grid {
+        display: none;
+      }
+
+      .mobile-toolbar {
+        display: flex;
+      }
+
       .toolbar,
       .panel-head,
-      .topbar,
       .avatar-row,
-      .section-head {
+      .mobile-drawer-head {
         align-items: stretch;
         flex-direction: column;
       }
@@ -742,10 +835,28 @@
         flex: 1 1 170px;
       }
 
+      .toolbar {
+        display: none;
+      }
+
       textarea {
         min-height: 18rem;
         padding: 1rem;
         font-size: 0.96rem;
+      }
+
+      .tool-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tool-card.secondary {
+        padding-top: 1rem;
+      }
+
+      .input-actions .button,
+      .output-actions .button {
+        width: 100%;
+        justify-content: center;
       }
     }
   </style>
@@ -757,13 +868,11 @@
         <aside class="sidebar" aria-label="Primary navigation">
           <div class="brand">
             <div class="brand-mark">S</div>
-            <div class="brand-copy">
-              <strong>Site AI Cleaner</strong>
-              <span>Static workspace</span>
+              <div class="brand-copy">
+              <strong>AI Text Cleaner</strong>
+              <span>Security First, Cleanup Later</span>
             </div>
           </div>
-
-          <button class="button launch-button" id="clean-trigger" type="button">Clean workspace</button>
 
           <nav class="nav-list" aria-label="Sections">
             <a class="nav-item is-active" href="#tool">
@@ -796,10 +905,57 @@
         </aside>
 
         <section class="main-stage">
+          <div class="mobile-toolbar">
+            <div>
+              <strong>AI Text Cleaner</strong>
+              <span>Core mobile workspace</span>
+            </div>
+            <button class="button mobile-menu-button" id="mobile-menu-button" type="button" aria-controls="mobile-drawer" aria-expanded="false">Menu</button>
+          </div>
+
+          <div class="mobile-drawer" id="mobile-drawer" hidden>
+            <div class="mobile-drawer-head">
+              <div>
+                <strong>Menu</strong>
+                <div class="muted">Actions, rules, and notes</div>
+              </div>
+              <button class="button button-secondary" id="mobile-menu-close" type="button">Close</button>
+            </div>
+
+            <div class="mobile-action-group">
+              <button class="button button-primary" id="sample-drawer-button" type="button">Try Me</button>
+              <button class="button button-secondary" id="copy-drawer-button" type="button">Copy result</button>
+              <button class="button button-secondary" id="clear-drawer-button" type="button">Clear both</button>
+            </div>
+
+            <div class="mobile-drawer-section">
+              <h2>Cleanup rules</h2>
+              <ul class="rule-list">
+                <li><code>–</code> and <code>−</code> become <code>-</code></li>
+                <li><code> — </code> becomes <code>, </code></li>
+                <li>Curly quotes become straight quotes</li>
+                <li>Bullet variants become <code>*</code></li>
+                <li>Hidden characters and hard spaces are normalized</li>
+                <li><code>, and</code> and <code>, or</code> are tightened</li>
+                <li><code>:contentReference[...]</code> paste artifacts are removed</li>
+              </ul>
+            </div>
+
+            <div class="mobile-drawer-section">
+              <h2>Security</h2>
+              <p class="muted">Pasted text stays in your browser with no upload step or server-side processing.</p>
+            </div>
+
+            <div class="mobile-drawer-section">
+              <h2>Copyright</h2>
+              <p class="muted">© 2026 Michaelpc Technology Ltd. All rights reserved.</p>
+            </div>
+          </div>
+
           <div class="topbar">
             <label class="search-wrap" aria-label="Dashboard search">
               <span>⌕</span>
-              <input type="text" value="text cleanup dashboard" readonly>
+              <input type="text" value="AI text sings here: work here, clean here, leave no trace behind." readonly>
             </label>
             <div class="top-actions">
               <button class="button icon-button" type="button" aria-label="Notifications">◌</button>
@@ -816,7 +972,7 @@
                 your writing flow without any backend or install step.
               </p>
               <div class="hero-actions">
-                <button class="button button-primary" id="sample-trigger" type="button">Load sample</button>
+                <button class="button button-primary" id="sample-trigger" type="button">Try Me</button>
                 <button class="button button-secondary" id="copy-button" type="button">Copy result</button>
                 <button class="button button-secondary" id="clear-button" type="button">Clear both</button>
               </div>
@@ -848,13 +1004,6 @@
 
           <section class="tool-grid" aria-label="Text cleanup workbench">
             <article class="tool-card primary">
-              <div class="toolbar">
-                <div class="toolbar-group">
-                  <button class="button button-primary" id="clean-button" type="button">Clean text</button>
-                </div>
-                <p class="muted">Paste source text and run cleanup.</p>
-              </div>
-
               <div class="workspace">
                 <div class="panel">
                   <div class="panel-head">
@@ -863,8 +1012,12 @@
                   </div>
                   <label for="input-text">Input</label>
                   <textarea id="input-text" spellcheck="false" placeholder="Paste text here..."></textarea>
+                  <div class="input-actions">
+                    <button class="button button-primary" id="clean-button" type="button">Clean text</button>
+                  </div>
                 </div>
               </div>
+
             </article>
 
             <article class="tool-card secondary">
@@ -875,6 +1028,9 @@
                 </div>
                 <label for="output-text" class="muted">Output</label>
                 <textarea id="output-text" spellcheck="false" readonly placeholder="Your cleaned text will appear here."></textarea>
+                <div class="output-actions">
+                  <button class="button button-secondary" id="copy-inline-button" type="button">Copy result</button>
+                </div>
               </div>
               <p class="status" id="status" role="status" aria-live="polite"></p>
             </article>
@@ -921,14 +1077,20 @@
             </div>
             <ul class="rule-list">
               <li><code>–</code> becomes <code>-</code></li>
+              <li><code>−</code> becomes <code>-</code></li>
               <li><code> — </code> becomes <code>, </code></li>
               <li><code>“ ”</code> become straight double quotes</li>
-              <li><code>’</code> becomes a straight apostrophe</li>
+              <li><code>‘ ’</code> become straight apostrophes</li>
               <li><code>…</code> becomes <code>...</code></li>
-              <li><code>•</code> becomes <code>*</code></li>
+              <li><code>• ◦ ▪ ‣</code> become <code>*</code></li>
+              <li>Zero-width characters and soft hyphens are removed</li>
+              <li>NBSP and narrow NBSP become normal spaces</li>
+              <li>Fullwidth punctuation is normalized</li>
               <li><code>, and</code> becomes <code> and</code></li>
               <li><code>, or</code> becomes <code> or</code></li>
               <li><code>&lt;2060&gt; &lt;2060&gt;</code> with whitespace is collapsed</li>
+              <li><code>:contentReference[...]</code> paste artifacts are removed</li>
+              <li>3 or more blank lines are reduced to 2</li>
             </ul>
           </div>
 
@@ -964,22 +1126,35 @@
   <script>
     (function () {
       const sampleText =
-        "“Fast, clear writing” — especially from copied sources — can hide bullets • ellipses… and stray markup like <2060>   <2060>.\n" +
-        "It also leaves awkward phrases, and or duplicated punctuation in text — which is irritating.";
+        "“Fast, clear writing” — especially from copied sources — can hide bullets • ◦ ▪ ‣, ellipses…, and stray markup like <2060>   <2060>.\n" +
+        "It may also include zero-width text\u200B\u200C\u200D\uFEFF, hard spaces\u00A0\u202F, soft\u00ADhyphens, Unicode minus −, and fullwidth punctuation ，：；（）.\n\n\n" +
+        "AI paste artifacts can leave ‘single quotes’, awkward phrases, and or duplicated punctuation, or citation leftovers like :contentReference[oaicite:0]{index=0}.";
 
       function cleanupText(text) {
         let cleaned = text;
+        cleaned = cleaned.replace(/\u200B|\u200C|\u200D|\uFEFF/g, "");
+        cleaned = cleaned.replace(/\u00A0|\u202F/g, " ");
+        cleaned = cleaned.replace(/\u00AD/g, "");
         cleaned = cleaned.replace(/–/g, "-");
+        cleaned = cleaned.replace(/−/g, "-");
         cleaned = cleaned.replace(/ — /g, ", ");
         cleaned = cleaned.replace(/ —/g, ",");
         cleaned = cleaned.replace(/“/g, "\"");
         cleaned = cleaned.replace(/”/g, "\"");
+        cleaned = cleaned.replace(/‘/g, "'");
         cleaned = cleaned.replace(/’/g, "'");
         cleaned = cleaned.replace(/…/g, "...");
-        cleaned = cleaned.replace(/•/g, "*");
+        cleaned = cleaned.replace(/•|◦|▪|‣/g, "*");
+        cleaned = cleaned.replace(/，/g, ",");
+        cleaned = cleaned.replace(/：/g, ":");
+        cleaned = cleaned.replace(/；/g, ";");
+        cleaned = cleaned.replace(/（/g, "(");
+        cleaned = cleaned.replace(/）/g, ")");
         cleaned = cleaned.replace(/, and/g, " and");
         cleaned = cleaned.replace(/, or/g, " or");
         cleaned = cleaned.replace(/<2060>\s+<2060>/g, " ");
+        cleaned = cleaned.replace(/:contentReference\[[^\]]*\](\{[^}]*\})?/g, "");
+        cleaned = cleaned.replace(/\n{3,}/g, "\n\n");
         return cleaned;
       }
 
@@ -988,13 +1163,17 @@
       const inputCount = document.getElementById("input-count");
       const outputCount = document.getElementById("output-count");
       const status = document.getElementById("status");
-      const cleanButtons = [
-        document.getElementById("clean-button"),
-        document.getElementById("clean-trigger")
-      ];
+      const cleanButtons = [document.getElementById("clean-button")];
       const sampleButton = document.getElementById("sample-trigger");
       const copyButton = document.getElementById("copy-button");
+      const copyInlineButton = document.getElementById("copy-inline-button");
       const clearButton = document.getElementById("clear-button");
+      const sampleDrawerButton = document.getElementById("sample-drawer-button");
+      const copyDrawerButton = document.getElementById("copy-drawer-button");
+      const clearDrawerButton = document.getElementById("clear-drawer-button");
+      const mobileMenuButton = document.getElementById("mobile-menu-button");
+      const mobileMenuClose = document.getElementById("mobile-menu-close");
+      const mobileDrawer = document.getElementById("mobile-drawer");
 
       function setStatus(message) {
         status.textContent = message;
@@ -1057,26 +1236,61 @@
         setStatus("Sample text loaded and cleaned.");
       }
 
+      function setMobileMenu(open) {
+        if (!mobileDrawer || !mobileMenuButton) {
+          return;
+        }
+        mobileDrawer.hidden = !open;
+        mobileDrawer.classList.toggle("is-open", open);
+        mobileMenuButton.setAttribute("aria-expanded", open ? "true" : "false");
+      }
+
       cleanButtons.forEach(function (button) {
-        button.addEventListener("click", runCleanup);
+        if (button) {
+          button.addEventListener("click", runCleanup);
+        }
       });
       sampleButton.addEventListener("click", loadSample);
       copyButton.addEventListener("click", copyOutput);
+      copyInlineButton.addEventListener("click", copyOutput);
       clearButton.addEventListener("click", clearBoth);
+      sampleDrawerButton.addEventListener("click", function () {
+        loadSample();
+        setMobileMenu(false);
+      });
+      copyDrawerButton.addEventListener("click", copyOutput);
+      clearDrawerButton.addEventListener("click", function () {
+        clearBoth();
+        setMobileMenu(false);
+      });
+      mobileMenuButton.addEventListener("click", function () {
+        setMobileMenu(mobileDrawer.hidden);
+      });
+      mobileMenuClose.addEventListener("click", function () {
+        setMobileMenu(false);
+      });
       input.addEventListener("input", function () {
         updateCounts();
         syncTextareaHeights();
         setStatus("");
       });
-      window.addEventListener("resize", syncTextareaHeights);
+      window.addEventListener("resize", function () {
+        syncTextareaHeights();
+        if (!window.matchMedia("(max-width: 720px)").matches) {
+          setMobileMenu(false);
+        }
+      });
 
       updateCounts();
       syncTextareaHeights();
+      setMobileMenu(false);
       window.SiteAiCleaner = {
         cleanupText: cleanupText,
         loadSample: loadSample,
+        copyOutput: copyOutput,
         runCleanup: runCleanup,
-        syncTextareaHeights: syncTextareaHeights
+        syncTextareaHeights: syncTextareaHeights,
+        setMobileMenu: setMobileMenu
       };
     }());
   </script>

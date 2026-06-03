@@ -1,3 +1,25 @@
+0.1.2 2026-06-03
+
+- Renamed the visible product label from `Site AI Cleaner` to `AI Text Cleaner`.
+- Reworded the desktop dashboard privacy line into a lyric-style message and updated the sidebar strapline copy.
+- Removed the stale client-side `clean-trigger` reference after consolidating the interface to one main clean action.
+- Wired the inline result copy button to the shared copy handler so the panel-local action works.
+- Closed the current release state with the full runtime, SEO, browser, coverage, and git gate sequence for the static site.
+
+0.1.1 2026-06-03
+
+- Reworked the interface into a pastel dashboard-inspired static layout while preserving the browser-only cleaner workflow.
+- Added Nginx root-path serving with `compose.yml` service `web` exposed on host port `8432`.
+- Tightened the desktop shell to an almost edge-to-edge layout and balanced the input and output panels to equal widths.
+- Simplified the mobile experience so the core workspace stays visible and secondary actions, rules, and notes sit behind a `Menu` drawer.
+- Added synced textarea auto-resizing so input and output stay matched in height as content grows.
+- Added an inline `Copy result` button directly below the cleaned output textarea.
+- Removed the duplicate desktop clean action from the left rail and aligned the input-side and output-side actions as full-width panel buttons.
+- Expanded cleanup rules for zero-width characters, NBSP variants, soft hyphen, Unicode minus, extra bullet variants, fullwidth punctuation, and pasted `:contentReference[...]` artifacts.
+- Updated the built-in sample text so `Try Me` exercises the expanded AI-text cleanup rules.
+- Added an explicit in-page security note clarifying that pasted text stays in the browser and is not uploaded.
+- Added Cloudflare domain metadata to `.env` for `clean.michaelpc.com`.
+
 0.1.0 2026-06-03
 
 - Refactored Site AI Cleaner into a frontend-only static page with inline HTML, CSS, and JavaScript.
