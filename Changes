@@ -1,0 +1,5 @@
+0.1.0 2026-06-03
+
+- Refactored Site AI Cleaner into a frontend-only static page with inline HTML, CSS, and JavaScript.
+- Archived the previous Python, Streamlit, and workflow files under `.OLD/`.
+- Added an Nginx Docker runtime and compose configuration for root-path serving on host port `8432`.

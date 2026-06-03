@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Site AI Cleaner | Plain Text Cleanup in Your Browser</title>
+  <meta name="description" content="Clean smart quotes, dashes, bullets, ellipses, and awkward pasted punctuation directly in your browser with a single-page text cleanup tool.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://clean.michaelpc.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Site AI Cleaner">
+  <meta property="og:description" content="A frontend-only text cleanup tool for stripping pasted punctuation oddities and making text predictable again.">
+  <meta property="og:url" content="https://clean.michaelpc.com/">
+  <meta property="og:site_name" content="Site AI Cleaner">
+  <meta property="og:image" content="https://clean.michaelpc.com/og-preview.svg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Site AI Cleaner">
+  <meta name="twitter:description" content="Clean pasted smart punctuation and hidden text artifacts directly in the browser.">
+  <meta name="twitter:image" content="https://clean.michaelpc.com/og-preview.svg">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Site AI Cleaner",
+      "applicationCategory": "BusinessApplication",
+      "browserRequirements": "Requires JavaScript. Works in modern desktop and mobile browsers.",
+      "description": "A browser-based text cleanup utility that converts smart punctuation and common pasted formatting artifacts into plainer text.",
+      "operatingSystem": "Any",
+      "url": "https://clean.michaelpc.com/"
+    }
+  </script>
+  <!-- version: 0.1.0 -->
+  <style>
+    :root {
+      --bg-top: #f6f4ff;
+      --bg-bottom: #dff7ff;
+      --surface: rgba(255, 255, 255, 0.88);
+      --surface-strong: #ffffff;
+      --ink: #1d2440;
+      --muted: #747c98;
+      --line: rgba(66, 77, 119, 0.12);
+      --accent: #6d74ff;
+      --accent-strong: #4f5ef7;
+      --sky: #69d7f6;
+      --gold: #f0af2d;
+      --mint: #6ee2b7;
+      --violet-soft: #eef0ff;
+      --shadow: 0 28px 60px rgba(104, 118, 180, 0.16);
+      --radius-xl: 30px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --wrap: 1580px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      color-scheme: light;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 18%, rgba(109, 116, 255, 0.12), transparent 28%),
+        radial-gradient(circle at 85% 22%, rgba(105, 215, 246, 0.24), transparent 25%),
+        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      width: calc(100% - 10px);
+      max-width: none;
+      margin: 0 auto;
+    }
+
+    .page {
+      padding: 2rem 0 3rem;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 216px minmax(0, 1fr) 300px;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .sidebar,
+    .main-stage,
+    .right-rail {
+      background: var(--surface);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar {
+      padding: 1.25rem;
+      display: grid;
+      gap: 1rem;
+      min-height: calc(100vh - 5rem);
+      position: sticky;
+      top: 1.5rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.4rem 0.2rem;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent) 0%, #7d9dff 100%);
+      box-shadow: 0 14px 28px rgba(109, 116, 255, 0.24);
+    }
+
+    .brand-copy strong,
+    .rail-head strong {
+      display: block;
+      font-size: 0.96rem;
+      line-height: 1.2;
+    }
+
+    .brand-copy span,
+    .rail-head span {
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    .launch-button {
+      border-radius: 999px;
+      padding: 0.85rem 1rem;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent-strong) 0%, #8490ff 100%);
+      box-shadow: 0 16px 30px rgba(109, 116, 255, 0.22);
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.85rem 0.9rem;
+      border-radius: 16px;
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 600;
+      background: transparent;
+    }
+
+    .nav-item.is-active {
+      color: var(--accent-strong);
+      background: var(--violet-soft);
+    }
+
+    .nav-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(109, 116, 255, 0.1);
+      color: var(--accent-strong);
+      font-size: 0.9rem;
+    }
+
+    .usage-card {
+      margin-top: auto;
+      padding: 1rem;
+      border-radius: 22px;
+      background: linear-gradient(180deg, #eef6ff 0%, #f9fbff 100%);
+      border: 1px solid rgba(109, 116, 255, 0.1);
+    }
+
+    .usage-bar,
+    .progress-bar {
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(109, 116, 255, 0.12);
+    }
+
+    .usage-fill,
+    .progress-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--sky) 100%);
+    }
+
+    .main-stage {
+      padding: 1.25rem;
+      display: grid;
+      gap: 1rem;
+      min-height: calc(100vh - 5rem);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      justify-content: space-between;
+    }
+
+    .search-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: var(--surface-strong);
+    }
+
+    .search-wrap input {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      font: inherit;
+      color: var(--ink);
+    }
+
+    .search-wrap input:focus {
+      outline: none;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .icon-button {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      padding: 0;
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
+    .intro-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(220px, 0.65fr);
+      gap: 1rem;
+      padding: 1.35rem;
+      border-radius: 26px;
+      background: linear-gradient(135deg, #8b98ff 0%, #c9b5ff 50%, #ffd6eb 100%);
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .intro-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -40px -50px auto;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    h1 {
+      margin-top: 1rem;
+      font-size: 40px;
+      max-width: 18ch;
+    }
+
+    .lede {
+      margin: 1.25rem 0 0;
+      max-width: 54ch;
+      font-size: 0.98rem;
+      line-height: 1.75;
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      margin-top: 1.75rem;
+    }
+
+    .button,
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 0.95rem 1.2rem;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    .button:focus-visible,
+    button:focus-visible,
+    textarea:focus-visible {
+      outline: 3px solid rgba(15, 118, 110, 0.24);
+      outline-offset: 2px;
+    }
+
+    .button-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent-strong) 0%, #8a94ff 100%);
+      box-shadow: 0 16px 28px rgba(79, 94, 247, 0.22);
+    }
+
+    .button-secondary {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(66, 77, 119, 0.08);
+    }
+
+    .button:hover,
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .quick-stats {
+      display: grid;
+      gap: 0.9rem;
+      align-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat {
+      padding: 1rem;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.35rem;
+      line-height: 1.2;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 0.3rem;
+      color: rgba(255, 255, 255, 0.82);
+      line-height: 1.45;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .section-head h2 {
+      font-size: 1.15rem;
+    }
+
+    .tab-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .tab {
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      background: #f4f6ff;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .tab.is-active {
+      background: #e8ebff;
+      color: var(--accent-strong);
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 1rem;
+    }
+
+    .tool-card,
+    .rules-card,
+    .mini-card,
+    .rail-card {
+      padding: 1.15rem;
+      border-radius: 24px;
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+    }
+
+    .tool-card.primary {
+      background: linear-gradient(135deg, #7f92ff 0%, #c9b9ff 56%, #ffd2ea 100%);
+      color: #fff;
+      border: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .tool-card.primary .muted,
+    .tool-card.primary .measure,
+    .tool-card.primary label {
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .tool-card.primary textarea {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.22);
+      color: #fff;
+      box-shadow: none;
+    }
+
+    .tool-card.primary textarea::placeholder {
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .tool-card.secondary {
+      gap: 1rem;
+      display: grid;
+    }
+
+    .rule-list {
+      display: grid;
+      gap: 0.7rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .rule-list li {
+      padding: 0.9rem 1rem;
+      border-radius: 16px;
+      background: #f7f8ff;
+      border: 1px solid rgba(109, 116, 255, 0.08);
+      line-height: 1.5;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.95rem;
+    }
+
+    .toolbar-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .panel {
+      display: grid;
+      gap: 0.7rem;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .panel-head h2 {
+      font-size: 1.6rem;
+      line-height: 1.05;
+    }
+
+    .measure {
+      font-size: 0.9rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 22rem;
+      resize: none;
+      overflow: hidden;
+      padding: 1.2rem 1.15rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: #f9fbff;
+      color: var(--ink);
+      font: 400 1rem/1.7 "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
+      box-shadow: inset 0 1px 2px rgba(17, 24, 39, 0.03);
+    }
+
+    .status {
+      min-height: 1.5rem;
+      margin-top: 0.9rem;
+      font-size: 0.95rem;
+      color: var(--accent-strong);
+    }
+
+    code {
+      padding: 0.15rem 0.35rem;
+      border-radius: 0.4rem;
+      background: rgba(109, 116, 255, 0.08);
+      font-family: "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
+      font-size: 0.92em;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .mini-card.sky {
+      background: linear-gradient(135deg, #78e3ff 0%, #c7f6ff 100%);
+    }
+
+    .mini-card.gold {
+      background: linear-gradient(135deg, #f7bb33 0%, #ffd675 100%);
+    }
+
+    .mini-card p,
+    .rail-card p {
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .rail-card {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .right-rail {
+      padding: 1.25rem;
+      display: grid;
+      gap: 1rem;
+      min-height: calc(100vh - 5rem);
+      position: sticky;
+      top: 1.5rem;
+    }
+
+    .avatar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent) 0%, #92a1ff 100%);
+    }
+
+    .task-list,
+    .tip-list {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .task,
+    .tip {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 0.9rem;
+      border-radius: 16px;
+      background: #f8f9ff;
+    }
+
+    .task-dot,
+    .tip-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex: none;
+    }
+
+    .task-dot.sky,
+    .tip-dot.sky {
+      background: var(--sky);
+    }
+
+    .task-dot.gold,
+    .tip-dot.gold {
+      background: var(--gold);
+    }
+
+    .task-dot.mint {
+      background: var(--mint);
+    }
+
+    footer {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 1220px) {
+      .dashboard {
+        grid-template-columns: 216px minmax(0, 1fr);
+      }
+
+      .right-rail {
+        position: static;
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .dashboard,
+      .tool-grid,
+      .intro-card,
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        padding-top: 1.1rem;
+      }
+
+      .shell {
+        width: calc(100% - 10px);
+      }
+
+      .sidebar,
+      .main-stage,
+      .right-rail {
+        border-radius: 22px;
+      }
+
+      .sidebar,
+      .main-stage,
+      .right-rail,
+      .tool-card,
+      .rules-card,
+      .mini-card,
+      .rail-card {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .sidebar,
+      .main-stage,
+      .right-rail {
+        padding-top: 1.2rem;
+        padding-bottom: 1.2rem;
+      }
+
+      h1 {
+        font-size: 40px;
+      }
+
+      .lede,
+      .rule-list li,
+      footer,
+      .mini-card p,
+      .rail-card p {
+        line-height: 1.65;
+      }
+
+      .toolbar,
+      .panel-head,
+      .topbar,
+      .avatar-row,
+      .section-head {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .toolbar-group {
+        width: 100%;
+      }
+
+      .toolbar-group button {
+        flex: 1 1 170px;
+      }
+
+      textarea {
+        min-height: 18rem;
+        padding: 1rem;
+        font-size: 0.96rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="shell">
+      <section class="dashboard" aria-label="Site AI Cleaner dashboard">
+        <aside class="sidebar" aria-label="Primary navigation">
+          <div class="brand">
+            <div class="brand-mark">S</div>
+            <div class="brand-copy">
+              <strong>Site AI Cleaner</strong>
+              <span>Static workspace</span>
+            </div>
+          </div>
+
+          <button class="button launch-button" id="clean-trigger" type="button">Clean workspace</button>
+
+          <nav class="nav-list" aria-label="Sections">
+            <a class="nav-item is-active" href="#tool">
+              <span class="nav-icon">A</span>
+              <span>AI cleaner</span>
+            </a>
+            <a class="nav-item" href="#rules">
+              <span class="nav-icon">R</span>
+              <span>Rules</span>
+            </a>
+            <a class="nav-item" href="#examples">
+              <span class="nav-icon">E</span>
+              <span>Examples</span>
+            </a>
+            <a class="nav-item" href="#notes">
+              <span class="nav-icon">N</span>
+              <span>Notes</span>
+            </a>
+          </nav>
+
+          <div class="usage-card">
+            <div class="rail-head">
+              <strong>Browser only</strong>
+              <span>Everything runs locally in the page.</span>
+            </div>
+            <div class="usage-bar" aria-hidden="true">
+              <div class="usage-fill" style="width: 82%"></div>
+            </div>
+          </div>
+        </aside>
+
+        <section class="main-stage">
+          <div class="topbar">
+            <label class="search-wrap" aria-label="Dashboard search">
+              <span>⌕</span>
+              <input type="text" value="text cleanup dashboard" readonly>
+            </label>
+            <div class="top-actions">
+              <button class="button icon-button" type="button" aria-label="Notifications">◌</button>
+              <button class="button icon-button" type="button" aria-label="Workspace">✦</button>
+            </div>
+          </div>
+
+          <section class="intro-card" id="tool" aria-label="Tool introduction">
+            <div>
+              <div class="eyebrow">Frontend only text cleaner</div>
+              <h1>Make pasted text behave again.</h1>
+              <p class="lede">
+                Strip copied punctuation noise, normalize pasted text, and hand clean output back to
+                your writing flow without any backend or install step.
+              </p>
+              <div class="hero-actions">
+                <button class="button button-primary" id="sample-trigger" type="button">Load sample</button>
+                <button class="button button-secondary" id="copy-button" type="button">Copy result</button>
+                <button class="button button-secondary" id="clear-button" type="button">Clear both</button>
+              </div>
+            </div>
+            <div class="quick-stats" aria-label="Quick stats">
+              <div class="stat">
+                <strong>No backend</strong>
+                <span>One page with inline logic and static hosting.</span>
+              </div>
+              <div class="stat">
+                <strong>Matched rules</strong>
+                <span>Browser logic follows the active cleanup contract.</span>
+              </div>
+              <div class="stat">
+                <strong>Fast handoff</strong>
+                <span>Paste, clean, copy, and move on.</span>
+              </div>
+            </div>
+          </section>
+
+          <div class="section-head">
+            <h2>AI cleaner workspace</h2>
+            <div class="tab-list" aria-label="Workspace tabs">
+              <span class="tab is-active">Cleaner</span>
+              <span class="tab">Examples</span>
+              <span class="tab">Rules</span>
+            </div>
+          </div>
+
+          <section class="tool-grid" aria-label="Text cleanup workbench">
+            <article class="tool-card primary">
+              <div class="toolbar">
+                <div class="toolbar-group">
+                  <button class="button button-primary" id="clean-button" type="button">Clean text</button>
+                </div>
+                <p class="muted">Paste source text and run cleanup.</p>
+              </div>
+
+              <div class="workspace">
+                <div class="panel">
+                  <div class="panel-head">
+                    <h2>Original text</h2>
+                    <span class="measure" id="input-count">0 characters</span>
+                  </div>
+                  <label for="input-text">Input</label>
+                  <textarea id="input-text" spellcheck="false" placeholder="Paste text here..."></textarea>
+                </div>
+              </div>
+            </article>
+
+            <article class="tool-card secondary">
+              <div class="panel">
+                <div class="panel-head">
+                  <h2>Cleaned output</h2>
+                  <span class="measure" id="output-count">0 characters</span>
+                </div>
+                <label for="output-text" class="muted">Output</label>
+                <textarea id="output-text" spellcheck="false" readonly placeholder="Your cleaned text will appear here."></textarea>
+              </div>
+              <p class="status" id="status" role="status" aria-live="polite"></p>
+            </article>
+          </section>
+
+          <section class="mini-grid" id="examples" aria-label="Examples and notes">
+            <article class="mini-card sky">
+              <h2>Before</h2>
+              <p>“Fast, clear writing” — especially from copied sources, and pasted from PDFs… can hide bullets • and odd markup like &lt;2060&gt; &lt;2060&gt;.</p>
+            </article>
+            <article class="mini-card gold">
+              <h2>After</h2>
+              <p>"Fast, clear writing", especially from copied sources and pasted from PDFs... can hide bullets * and odd markup like  .</p>
+            </article>
+          </section>
+        </section>
+
+        <aside class="right-rail" id="notes" aria-label="Progress and rule summary">
+          <div class="avatar-row">
+            <div class="brand">
+              <div class="avatar">AC</div>
+              <div class="brand-copy">
+                <strong>Active cleaner</strong>
+                <span>Dashboard mode</span>
+              </div>
+            </div>
+            <button class="button icon-button" type="button" aria-label="Profile actions">⋯</button>
+          </div>
+
+          <div class="rail-card">
+            <div class="rail-head">
+              <strong>Progress</strong>
+              <span>Current browser workflow coverage.</span>
+            </div>
+            <div class="progress-bar" aria-hidden="true">
+              <div class="progress-fill" style="width: 76%"></div>
+            </div>
+          </div>
+
+          <div class="rail-card" id="rules">
+            <div class="rail-head">
+              <strong>Cleanup rules</strong>
+              <span>Core replacements active in the page.</span>
+            </div>
+            <ul class="rule-list">
+              <li><code>–</code> becomes <code>-</code></li>
+              <li><code> — </code> becomes <code>, </code></li>
+              <li><code>“ ”</code> become straight double quotes</li>
+              <li><code>’</code> becomes a straight apostrophe</li>
+              <li><code>…</code> becomes <code>...</code></li>
+              <li><code>•</code> becomes <code>*</code></li>
+              <li><code>, and</code> becomes <code> and</code></li>
+              <li><code>, or</code> becomes <code> or</code></li>
+              <li><code>&lt;2060&gt; &lt;2060&gt;</code> with whitespace is collapsed</li>
+            </ul>
+          </div>
+
+          <div class="rail-card">
+            <div class="rail-head">
+              <strong>Workflow tips</strong>
+              <span>Quick reminders for fast cleanup passes.</span>
+            </div>
+            <div class="tip-list">
+              <div class="tip">
+                <span class="tip-dot sky"></span>
+                <p>Load the sample to preview the active normalization output.</p>
+              </div>
+              <div class="tip">
+                <span class="tip-dot gold"></span>
+                <p>The two editors stay height-synced as content expands.</p>
+              </div>
+              <div class="tip">
+                <span class="tip-dot mint"></span>
+                <p>Security: pasted text stays in your browser with no upload step or server-side processing.</p>
+              </div>
+            </div>
+          </div>
+
+          <footer>
+            © 2026 Michaelpc Technology Ltd. All rights reserved.
+          </footer>
+        </aside>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      const sampleText =
+        "“Fast, clear writing” — especially from copied sources — can hide bullets • ellipses… and stray markup like <2060>   <2060>.\n" +
+        "It also leaves awkward phrases, and or duplicated punctuation in text — which is irritating.";
+
+      function cleanupText(text) {
+        let cleaned = text;
+        cleaned = cleaned.replace(/–/g, "-");
+        cleaned = cleaned.replace(/ — /g, ", ");
+        cleaned = cleaned.replace(/ —/g, ",");
+        cleaned = cleaned.replace(/“/g, "\"");
+        cleaned = cleaned.replace(/”/g, "\"");
+        cleaned = cleaned.replace(/’/g, "'");
+        cleaned = cleaned.replace(/…/g, "...");
+        cleaned = cleaned.replace(/•/g, "*");
+        cleaned = cleaned.replace(/, and/g, " and");
+        cleaned = cleaned.replace(/, or/g, " or");
+        cleaned = cleaned.replace(/<2060>\s+<2060>/g, " ");
+        return cleaned;
+      }
+
+      const input = document.getElementById("input-text");
+      const output = document.getElementById("output-text");
+      const inputCount = document.getElementById("input-count");
+      const outputCount = document.getElementById("output-count");
+      const status = document.getElementById("status");
+      const cleanButtons = [
+        document.getElementById("clean-button"),
+        document.getElementById("clean-trigger")
+      ];
+      const sampleButton = document.getElementById("sample-trigger");
+      const copyButton = document.getElementById("copy-button");
+      const clearButton = document.getElementById("clear-button");
+
+      function setStatus(message) {
+        status.textContent = message;
+      }
+
+      function updateCounts() {
+        inputCount.textContent = input.value.length + (input.value.length === 1 ? " character" : " characters");
+        outputCount.textContent = output.value.length + (output.value.length === 1 ? " character" : " characters");
+      }
+
+      function syncTextareaHeights() {
+        const minimumHeight = window.matchMedia("(max-width: 720px)").matches ? 288 : 384;
+        input.style.height = "auto";
+        output.style.height = "auto";
+        const nextHeight = Math.max(minimumHeight, input.scrollHeight, output.scrollHeight);
+        input.style.height = nextHeight + "px";
+        output.style.height = nextHeight + "px";
+      }
+
+      function runCleanup() {
+        output.value = cleanupText(input.value);
+        updateCounts();
+        syncTextareaHeights();
+        setStatus(output.value ? "Cleaned output is ready to copy." : "Nothing to clean yet.");
+      }
+
+      async function copyOutput() {
+        if (!output.value) {
+          setStatus("Add text and run cleanup before copying.");
+          return;
+        }
+
+        try {
+          await navigator.clipboard.writeText(output.value);
+          setStatus("Cleaned output copied to your clipboard.");
+        } catch (_error) {
+          output.removeAttribute("readonly");
+          output.select();
+          output.setSelectionRange(0, output.value.length);
+          document.execCommand("copy");
+          output.setAttribute("readonly", "readonly");
+          setStatus("Cleaned output selected for copying.");
+        }
+      }
+
+      function clearBoth() {
+        input.value = "";
+        output.value = "";
+        updateCounts();
+        syncTextareaHeights();
+        setStatus("Workspace cleared.");
+        input.focus();
+      }
+
+      function loadSample() {
+        input.value = sampleText;
+        runCleanup();
+        input.focus();
+        input.setSelectionRange(0, input.value.length);
+        setStatus("Sample text loaded and cleaned.");
+      }
+
+      cleanButtons.forEach(function (button) {
+        button.addEventListener("click", runCleanup);
+      });
+      sampleButton.addEventListener("click", loadSample);
+      copyButton.addEventListener("click", copyOutput);
+      clearButton.addEventListener("click", clearBoth);
+      input.addEventListener("input", function () {
+        updateCounts();
+        syncTextareaHeights();
+        setStatus("");
+      });
+      window.addEventListener("resize", syncTextareaHeights);
+
+      updateCounts();
+      syncTextareaHeights();
+      window.SiteAiCleaner = {
+        cleanupText: cleanupText,
+        loadSample: loadSample,
+        runCleanup: runCleanup,
+        syncTextareaHeights: syncTextareaHeights
+      };
+    }());
+  </script>
+</body>
+</html>

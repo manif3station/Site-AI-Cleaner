@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Site AI Cleaner preview</title>
+  <desc id="desc">Preview card for Site AI Cleaner, a browser-based text cleanup tool.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8f4ec"/>
+      <stop offset="100%" stop-color="#efe8dd"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <circle cx="1050" cy="120" r="140" fill="#d8ede9"/>
+  <circle cx="130" cy="520" r="170" fill="#f1ddc5"/>
+  <rect x="72" y="70" width="1056" height="490" rx="28" fill="#fffaf2" stroke="#d8d1c8"/>
+  <rect x="110" y="120" width="220" height="42" rx="21" fill="#d8ede9"/>
+  <text x="132" y="147" font-family="Avenir Next, Segoe UI, sans-serif" font-size="18" font-weight="700" letter-spacing="2.2" fill="#115e59">FRONTEND ONLY TEXT CLEANER</text>
+  <text x="110" y="250" font-family="Iowan Old Style, Georgia, serif" font-size="84" font-weight="700" letter-spacing="-2.4" fill="#1e2430">Site AI Cleaner</text>
+  <text x="110" y="320" font-family="Avenir Next, Segoe UI, sans-serif" font-size="32" fill="#5f6877">Clean smart punctuation and pasted text artifacts in your browser.</text>
+  <rect x="110" y="390" width="430" height="88" rx="22" fill="#0f766e"/>
+  <text x="150" y="443" font-family="Avenir Next, Segoe UI, sans-serif" font-size="34" font-weight="700" fill="#ffffff">Paste. Clean. Copy.</text>
+  <rect x="700" y="170" width="320" height="230" rx="24" fill="#f7f1e8" stroke="#ddd4c7"/>
+  <text x="730" y="230" font-family="Consolas, monospace" font-size="22" fill="#1e2430">“Draft” — with bullets •</text>
+  <text x="730" y="268" font-family="Consolas, monospace" font-size="22" fill="#1e2430">and ellipses… becomes</text>
+  <text x="730" y="332" font-family="Consolas, monospace" font-size="22" fill="#115e59">"Draft" ,  with bullets *</text>
+  <text x="730" y="370" font-family="Consolas, monospace" font-size="22" fill="#115e59">and ellipses...</text>
+</svg>

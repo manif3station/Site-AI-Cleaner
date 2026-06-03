@@ -1,10 +1,3 @@
-FROM --platform=$BUILDPLATFORM python:latest
+FROM nginx:1.29-alpine
 
-WORKDIR /app
-
-COPY requirements.txt .
-COPY app.py .
-
-RUN pip install -r requirements.txt
-
-ENTRYPOINT ["python", "app.py", "--web"]
+COPY index.html robots.txt sitemap.xml og-preview.svg /usr/share/nginx/html/
