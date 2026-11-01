@@ -1,0 +1,5 @@
+services:
+  web:
+    build:
+      context: ${DIR_CLEANUP}
+      dockerfile: ${DIR_CLEANUP_DOCKER}/web/Dockerfile

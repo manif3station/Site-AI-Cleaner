@@ -1,5 +1,5 @@
 services:
   web:
-    build: .
+    image: cleanup:latest
     ports:
     - "8432:80"
